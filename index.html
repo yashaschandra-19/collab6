@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anime Dashboard</title>
+  <style>
+    /* General Reset and Styling */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #121212;
+      color: #fff;
+      padding: 20px;
+    }
+
+    header {
+      text-align: center;
+      background-color: #D32F2F;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background-color: #212121;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-size: 1.2rem;
+    }
+
+    nav a:hover {
+      color: #D32F2F;
+    }
+
+    /* Search Bar */
+    .search-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .search-container input {
+      padding: 10px;
+      width: 300px;
+      font-size: 1.2rem;
+      border: 2px solid #D32F2F;
+      border-radius: 5px;
+      background-color: #121212;
+      color: white;
+    }
+
+    /* Anime Cards */
+    .anime-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .anime-card {
+      background-color: #333;
+      border-radius: 10px;
+      width: 250px;
+      text-align: center;
+      padding: 15px;
+      transition: transform 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .anime-card:hover {
+      transform: scale(1.05);
+    }
+
+    .anime-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    .anime-title {
+      font-size: 1.5rem;
+      color: #fff;
+    }
+
+    .anime-description {
+      font-size: 1rem;
+      color: #ccc;
+      margin-bottom: 10px;
+    }
+
+    .episode-links {
+      margin-top: 10px;
+    }
+
+    .episode-links a {
+      color: #D32F2F;
+      text-decoration: none;
+      font-size: 1rem;
+      display: block;
+      margin-top: 5px;
+    }
+
+    .episode-links a:hover {
+      text-decoration: underline;
+    }
+
+    /* Login Section */
+    .login-container {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .login-container input {
+      padding: 10px;
+      margin: 5px;
+      width: 200px;
+      font-size: 1rem;
+      background-color: #333;
+      color: white;
+      border: 2px solid #D32F2F;
+      border-radius: 5px;
+    }
+
+    .login-container button {
+      padding: 10px;
+      margin: 10px;
+      background-color: #D32F2F;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .login-container button:hover {
+      background-color: #C62828;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+      .anime-container {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <h1>Anime Dashboard</h1>
+    <p>Discover, Search, and Watch Your Favorite Anime</p>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <a href="#" id="home-link">Home</a>
+    <a href="#" id="browse-link">Browse Anime</a>
+    <a href="#" id="login-link">Login</a>
+  </nav>
+
+  <!-- Search Bar -->
+  <div class="search-container">
+    <input type="text" id="search-bar" placeholder="Search Anime..." onkeyup="searchAnime()">
+  </div>
+
+  <!-- Anime Cards Container -->
+  <div class="anime-container" id="anime-list">
+    <!-- Anime cards will be displayed here -->
+  </div>
+
+  <!-- Login Section -->
+  <div class="login-container" id="login-container">
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+  </div>
+
+  <script>
+    // Sample Anime Data
+    const animeList = [
+      {
+        title: "Attack on Titan",
+        image: "https://upload.wikimedia.org/wikipedia/commons/4/46/Attack_on_Titan_logo.jpg",
+        description: "A story about humans fighting against titans to survive.",
+        episodes: ["Episode 1", "Episode 2", "Episode 3"]
+      },
+      {
+        title: "Naruto",
+        image: "https://upload.wikimedia.org/wikipedia/commons/c/c5/Naruto_Logo.svg",
+        description: "Naruto's journey to become the strongest ninja and Hokage.",
+        episodes: ["Episode 1", "Episode 2", "Episode 3"]
+      },
+      {
+        title: "One Piece",
+        image: "https://upload.wikimedia.org/wikipedia/commons/a/a1/One_Piece_logo.svg",
+        description: "Luffy and his crew search for the One Piece treasure.",
+        episodes: ["Episode 1", "Episode 2", "Episode 3"]
+      },
+      {
+        title: "Dragon Ball Z",
+        image: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Dragon_Ball_Z_logo.svg",
+        description: "Goku and his friends protect Earth from powerful foes.",
+        episodes: ["Episode 1", "Episode 2", "Episode 3"]
+      },
+      {
+        title: "My Hero Academia",
+        image: "https://upload.wikimedia.org/wikipedia/commons/e/eb/My_Hero_Academia_logo.svg",
+        description: "A world where people have superpowers known as quirks, and a young boy dreams of becoming a hero.",
+        episodes: ["Episode 1", "Episode 2", "Episode 3"]
+      }
+    ];
+
+    const animeListContainer = document.getElementById("anime-list");
+    const searchBar = document.getElementById("search-bar");
+    const loginContainer = document.getElementById("login-container");
+
+    // Function to display all anime
+    function displayAnime(animeData) {
+      animeListContainer.innerHTML = "";
+      animeData.forEach(anime => {
+        const card = document.createElement("div");
+        card.classList.add("anime-card");
+
+        const episodesLinks = anime.episodes.map(episode => 
+          `<a href="#" onclick="watchEpisode('${anime.title}', '${episode}')">${episode}</a>`
+        ).join("");
+
+        card.innerHTML = `
+          <img src="${anime.image}" alt="${anime.title}" class="anime-image">
+          <div class="anime-title">${anime.title}</div>
+          <p class="anime-description">${anime.description}</p>
+          <div class="episode-links">${episodesLinks}</div>
+        `;
+
+        animeListContainer.appendChild(card);
+      });
+    }
+
+    // Function to search anime
+    function searchAnime() {
+      const searchQuery = searchBar.value.toLowerCase();
+      const filteredAnime = animeList.filter(anime => 
+        anime.title.toLowerCase().includes(searchQuery)
+      );
+      displayAnime(filteredAnime);
+    }
+
+    // Function to simulate watching an episode
+    function watchEpisode(animeTitle, episode) {
+      alert(`Now watching: ${animeTitle} - ${episode}`);
+    }
+
+    // Function to simulate login (for now)
+    function login() {
+      const username = document.getElementById("username").value;
+      if (username) {
+        alert(`Welcome, ${username}!`);
+        loginContainer.style.display = 'none';
+        document.getElementById("browse-link").style.display = 'block';
+      }
+    }
+
+    // Show anime cards on page load
+    displayAnime(animeList);
+  </script>
+
+</body>
+</html>
